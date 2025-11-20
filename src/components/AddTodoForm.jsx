@@ -91,13 +91,27 @@ function AddTodoForm({ onAddTodo }) {
               <label htmlFor="dueDate" className="form-label">
                 Due Date
               </label>
+
               <input
                 id="dueDate"
                 type="datetime-local"
-                className="form-control"
-                {...register("dueDate")}
+                className={`form-control ${errors.dueDate ? "is-invalid" : ""}`}
+                {...register("dueDate", {
+                  validate: (value) => {
+                    if (!value) return true; // optional
+                    return (
+                      new Date(value) >= new Date() ||
+                      "Due date cannot be in the past"
+                    );
+                  },
+                })}
               />
+
+              {errors.dueDate && (
+                <small className="text-danger">{errors.dueDate.message}</small>
+              )}
             </div>
+
             <div className="col-md-6">
               <label htmlFor="assignedTo" className="form-label">
                 Assign to Person (Optional)
