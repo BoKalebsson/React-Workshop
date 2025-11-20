@@ -1,4 +1,4 @@
-function TodoCard({ todo, onToggleCompleted }) {
+function TodoCard({ todo, onToggleCompleted, onDeleteTodo }) {
   const completedDate = todo.completedAt ? new Date(todo.completedAt) : null;
   return (
     <div
@@ -27,7 +27,10 @@ function TodoCard({ todo, onToggleCompleted }) {
             <button className="btn btn-outline-primary btn-sm">
               <i className="bi bi-pencil"></i>
             </button>
-            <button className="btn btn-outline-danger btn-sm">
+            <button
+              className="btn btn-outline-danger btn-sm"
+              onClick={() => onDeleteTodo(todo.id)}
+            >
               <i className="bi bi-trash"></i>
             </button>
           </div>

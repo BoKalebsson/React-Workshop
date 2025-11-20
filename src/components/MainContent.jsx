@@ -23,6 +23,10 @@ function MainContent() {
     );
   }
 
+  function handleDeleteTodo(id) {
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
+  }
+
   return (
     <main className="main-content overflow-auto bg-white">
       <div className="container-fluid">
@@ -36,6 +40,7 @@ function MainContent() {
               <TodoList
                 todos={todos}
                 onToggleCompleted={handleToggleCompleted}
+                onDeleteTodo={handleDeleteTodo}
               />
             </div>
           </div>

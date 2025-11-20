@@ -1,6 +1,6 @@
 import TodoCard from "./TodoCard";
 
-function TodoList({ todos, onToggleCompleted }) {
+function TodoList({ todos, onToggleCompleted, onDeleteTodo }) {
   return (
     <div className="card shadow-sm rounded-0">
       <div className="card-header bg-secondary bg-opacity-25 bg-gradient d-flex justify-content-between align-items-center rounded-0">
@@ -24,6 +24,7 @@ function TodoList({ todos, onToggleCompleted }) {
               key={todo.id}
               todo={todo}
               onToggleCompleted={onToggleCompleted}
+              onDeleteTodo={onDeleteTodo}
             />
           ))
         )}
