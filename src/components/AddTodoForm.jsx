@@ -1,20 +1,24 @@
 import { useState, useRef } from "react";
+import { useForm } from "react-hook-form";
 
 function AddTodoForm({ onAddTodo }) {
   const fileInputRef = useRef(null);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [assignedTo, setAssignedTo] = useState("");
   const [attachments, setAttachments] = useState([]);
 
-  function handleSubmit() {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  function onSubmit(formData) {
     const newTodo = {
       id: crypto.randomUUID(),
-      title,
-      description,
-      dueDate,
-      assignedTo,
+      title: formData.title,
+      description: formData.description,
+      dueDate: formData.dueDate || null,
+      assignedTo: formData.assignedTo || "",
       attachments,
       createdAt: new Date().toISOString(),
       completed: false,
@@ -24,11 +28,10 @@ function AddTodoForm({ onAddTodo }) {
     // Send to MainContent:
     onAddTodo(newTodo);
 
-    // Reset the form-fields:
-    setTitle("");
-    setDescription("");
-    setDueDate("");
-    setAssignedTo("");
+    // Reset React Hoof Form:
+    reset();
+
+    // Reset attachments:
     setAttachments([]);
 
     // Reset file input:
@@ -40,19 +43,22 @@ function AddTodoForm({ onAddTodo }) {
   return (
     <div className="card bg-light bg-opacity-75 bg-gradient mb-1 rounded-0">
       <div className="card-body">
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           {/* Title */}
           <div className="mb-3">
             <label htmlFor="title" className="form-label">
               Title
             </label>
+
             <input
-              type="text"
               id="title"
-              className="form-control"
-              value={title}
-              onChange={(event) => setTitle(event.target.value)}
+              className={`form-control ${errors.title ? "is-invalid" : ""}`}
+              {...register("title", { required: "Title is required" })}
             />
+
+            {errors.title && (
+              <small className="text-danger">{errors.title.message}</small>
+            )}
           </div>
 
           {/* Description */}
@@ -60,13 +66,23 @@ function AddTodoForm({ onAddTodo }) {
             <label htmlFor="description" className="form-label">
               Description
             </label>
+
             <textarea
               id="description"
-              className="form-control"
               rows="3"
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
+              className={`form-control ${
+                errors.description ? "is-invalid" : ""
+              }`}
+              {...register("description", {
+                required: "Description is required",
+              })}
             ></textarea>
+
+            {errors.description && (
+              <small className="text-danger">
+                {errors.description.message}
+              </small>
+            )}
           </div>
 
           {/* Due Date & Assigned To */}
@@ -76,11 +92,10 @@ function AddTodoForm({ onAddTodo }) {
                 Due Date
               </label>
               <input
-                type="datetime-local"
                 id="dueDate"
+                type="datetime-local"
                 className="form-control"
-                value={dueDate}
-                onChange={(event) => setDueDate(event.target.value)}
+                {...register("dueDate")}
               />
             </div>
             <div className="col-md-6">
@@ -90,8 +105,7 @@ function AddTodoForm({ onAddTodo }) {
               <select
                 id="assignedTo"
                 className="form-select"
-                value={assignedTo}
-                onChange={(event) => setAssignedTo(event.target.value)}
+                {...register("assignedTo")}
               >
                 <option value="">-- Select Person --</option>
                 <option value="Alice">Alice</option>
@@ -155,11 +169,7 @@ function AddTodoForm({ onAddTodo }) {
 
           {/* Add Todo Button */}
           <div className="text-end">
-            <button
-              type="button"
-              className="btn btn-secondary opacity-50"
-              onClick={handleSubmit}
-            >
+            <button type="submit" className="btn btn-secondary opacity-50">
               + Add Todo
             </button>
           </div>
