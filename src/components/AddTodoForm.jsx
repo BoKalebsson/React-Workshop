@@ -18,6 +18,7 @@ function AddTodoForm({ onAddTodo }) {
       attachments,
       createdAt: new Date().toISOString(),
       completed: false,
+      completedAt: null,
     };
 
     // Send to MainContent:

@@ -9,6 +9,20 @@ function MainContent() {
     setTodos((prev) => [...prev, newTodo]);
   }
 
+  function handleToggleCompleted(id) {
+    setTodos((prev) =>
+      prev.map((todo) =>
+        todo.id === id
+          ? {
+              ...todo,
+              completed: !todo.completed,
+              completedAt: todo.completed ? null : new Date().toISOString(),
+            }
+          : todo
+      )
+    );
+  }
+
   return (
     <main className="main-content overflow-auto bg-white">
       <div className="container-fluid">
@@ -19,7 +33,10 @@ function MainContent() {
             </div>
 
             <div className="bg-white p-3">
-              <TodoList todos={todos} />
+              <TodoList
+                todos={todos}
+                onToggleCompleted={handleToggleCompleted}
+              />
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import TodoCard from "./TodoCard";
 
-function TodoList({ todos }) {
+function TodoList({ todos, onToggleCompleted }) {
   return (
     <div className="card shadow-sm rounded-0">
       <div className="card-header bg-secondary bg-opacity-25 bg-gradient d-flex justify-content-between align-items-center rounded-0">
@@ -19,7 +19,13 @@ function TodoList({ todos }) {
         {todos.length === 0 ? (
           <p className="text-muted">No todos yet.</p>
         ) : (
-          todos.map((todo) => <TodoCard key={todo.id} todo={todo} />)
+          todos.map((todo) => (
+            <TodoCard
+              key={todo.id}
+              todo={todo}
+              onToggleCompleted={onToggleCompleted}
+            />
+          ))
         )}
       </div>
     </div>
